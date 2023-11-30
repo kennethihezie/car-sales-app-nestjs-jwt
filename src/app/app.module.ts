@@ -6,7 +6,11 @@ import { UsersModule } from 'src/users/users.module';
 import { ReportsModule } from 'src/reports/reports.module';
 import { User } from 'src/users/model/user.entity';
 import { Report } from 'src/reports/model/report.entity';
-import { CookieSessionModule } from 'nestjs-cookie-session';
+import { JwtModule } from '@nestjs/jwt';
+import { Constants } from 'src/utils/contstants';
+import { AuthModule } from 'src/auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 
 @Module({
@@ -17,11 +21,19 @@ import { CookieSessionModule } from 'nestjs-cookie-session';
     entities: [ User, Report ],
     synchronize: true
   }), 
-  CookieSessionModule.forRoot({ session: { secret: 'qwerty' } }),
+    JwtModule.register({
+      global: true,
+      secret: Constants.SECRET_KEY,
+      signOptions: { expiresIn: '2 days' }
+    }),
     UsersModule, 
-    ReportsModule
+    ReportsModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, {
+    provide: APP_GUARD,
+    useClass: AuthGuard
+  }],
 })
 export class AppModule {}

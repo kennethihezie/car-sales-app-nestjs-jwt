@@ -2,20 +2,19 @@ import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from '@ne
 import { AdminGuard } from 'src/guards/admin-guard';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { Serialize } from 'src/interceptors/serialize.interceptors';
-import { CurrentUser } from 'src/users/decorators/current-user.decorator';
 import { User } from 'src/users/model/user.entity';
 import { ApprovedReportDto } from './dto/approve-report-dto';
 import CreateReportDto from './dto/create-report-dto';
 import { GetEstimateDto } from './dto/get-estimate-dto';
 import { ReportDto } from './dto/report.dto';
 import { ReportsService } from './reports.service';
+import { CurrentUser } from 'src/users/decorators/current-user.decorator';
 
 @Controller('reports')
 export class ReportsController {
     constructor(private readonly reportService: ReportsService) {}
 
     @Post()
-    //Make sure user is signed in.
     @UseGuards(AuthGuard)
     @Serialize(ReportDto)
     createReport(@Body() body: CreateReportDto, @CurrentUser() user: User) {
@@ -33,7 +32,6 @@ export class ReportsController {
        this.reportService.createEstimate(query)
     }
 }
-
 /*
 Order of execution from an incoming request
 

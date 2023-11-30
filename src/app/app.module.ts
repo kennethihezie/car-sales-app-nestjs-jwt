@@ -21,11 +21,6 @@ import { AuthGuard } from 'src/guards/auth.guard';
     entities: [ User, Report ],
     synchronize: true
   }), 
-    JwtModule.register({
-      global: true,
-      secret: Constants.SECRET_KEY,
-      signOptions: { expiresIn: '2 days' }
-    }),
     UsersModule, 
     ReportsModule,
     AuthModule,

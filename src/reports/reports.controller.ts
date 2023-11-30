@@ -37,8 +37,5 @@ export class ReportsController {
 /*
 Order of execution from an incoming request
 
-Middlewares
-Guards
-Interceptors
-
+Middleware -> Interceptors -> Route Handler -> Interceptors -> Exception Filter (if exception is thrown)
 */

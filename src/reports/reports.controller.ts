@@ -15,7 +15,6 @@ export class ReportsController {
     constructor(private readonly reportService: ReportsService) {}
 
     @Post()
-    @UseGuards(AuthGuard)
     @Serialize(ReportDto)
     createReport(@Body() body: CreateReportDto, @CurrentUser() user: User) {
         return this.reportService.createReport(body, user)
@@ -32,8 +31,3 @@ export class ReportsController {
        this.reportService.createEstimate(query)
     }
 }
-/*
-Order of execution from an incoming request
-
-Middleware -> Interceptors -> Route Handler -> Interceptors -> Exception Filter (if exception is thrown)
-*/

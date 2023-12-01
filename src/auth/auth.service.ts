@@ -18,7 +18,7 @@ export class AuthService{
 
   async signUp({email, password}: UserDto): Promise<AuthUserTokenDto>{
     // See if email is in use.
-    const users = await this.userService.getAllUserByEmail(email)
+    const users = await this.userService.getUsersByEmail(email)
     if(users.length){
         throw new BadRequestException('Email in use')
     }
@@ -43,7 +43,7 @@ export class AuthService{
   }
  
   async logIn({email, password}: UserDto): Promise<AuthUserTokenDto>{
-     const [user] = (await this.userService.getAllUserByEmail(email))
+     const [user] = (await this.userService.getUsersByEmail(email))
      if(!user){
       throw new BadRequestException('User Not Found')
      }

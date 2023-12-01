@@ -6,29 +6,35 @@ import { UsersModule } from 'src/users/users.module';
 import { ReportsModule } from 'src/reports/reports.module';
 import { User } from 'src/users/model/user.entity';
 import { Report } from 'src/reports/model/report.entity';
-import { JwtModule } from '@nestjs/jwt';
-import { Constants } from 'src/utils/contstants';
 import { AuthModule } from 'src/auth/auth.module';
-import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from 'src/guards/auth.guard';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+
 
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-    type: 'sqlite',
-    database: 'db.sqlite',
-    entities: [ User, Report ],
-    synchronize: true
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: `.env.${process.env.NODE_ENV}`
+    }),
+    TypeOrmModule.forRootAsync({
+    inject: [ ConfigService ],
+    useFactory: (config: ConfigService) => {      
+      return {
+        type: 'sqlite',
+        database: config.get<string>('DB_NAME'),
+        entities: [ User, Report ],
+        // DO not make use of synchronize in production
+        synchronize: true,
+      }
+    }
   }), 
     UsersModule, 
     ReportsModule,
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService, {
-    provide: APP_GUARD,
-    useClass: AuthGuard
-  }],
+  providers: [AppService],
 })
+
 export class AppModule {}

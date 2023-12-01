@@ -3,7 +3,7 @@ import { Reflector } from "@nestjs/core";
 import { JwtService } from "@nestjs/jwt";
 import { Observable } from "rxjs";
 import { IS_PUBLIC_KEY } from "src/auth/decorator/public.decorator";
-import { Request } from "express";
+import { Helpers } from "src/utils/helper";
 
 // we need the AuthGuard to return true when the
 // isPublic metadata is found. For this, we'll use the Reflector class. 
@@ -23,25 +23,20 @@ export class AuthGuard implements CanActivate {
         }
 
         const request = context.switchToHttp().getRequest()
-        const token = this.extractTokenFromHeader(request)
+        const token = Helpers.extractTokenFromHeader(request)
 
         if(!token){
             throw new UnauthorizedException()
         }
 
         try {
-            const payload = await this.jwtService.verifyAsync(token)
+            const payload = await this.jwtService.verifyAsync(token)            
             request['user'] = payload
         } catch {
             throw new UnauthorizedException()
         }
 
         return true
-    }
-
-    private extractTokenFromHeader(request: Request): string | undefined {        
-        const [type, token] = request.headers.authorization?.split(' ') ?? []
-        return type === 'Bearer' ? token : undefined
     }
 }
 

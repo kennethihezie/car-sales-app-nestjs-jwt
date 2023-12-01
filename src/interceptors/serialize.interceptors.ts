@@ -2,8 +2,8 @@ import { CallHandler, ExecutionContext, NestInterceptor, UseInterceptors } from 
 import { plainToClass } from "class-transformer";
 import { map, Observable } from "rxjs";
 
-//help for type safety
-//basically it takes a class as an argument
+// Help for type safety
+// Basically it takes a class as an argument
 interface ClassConstrutor {
     new (...args: any[]): {}
 }

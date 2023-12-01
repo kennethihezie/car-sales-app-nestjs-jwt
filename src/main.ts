@@ -21,3 +21,9 @@ async function bootstrap() {
 }
 
 bootstrap();
+
+/*
+Order of execution from an incoming request
+
+Middleware -> Guards -> Interceptors -> Route Handler -> Interceptors -> Exception Filter (if exception is thrown)
+*/

@@ -30,10 +30,10 @@ export class Report {
     @Column()
     milage: number
 
-    //Creating a many to one relationship
-    //once you add this it will cause a change in the database.
-    //User who created this report will be accessed with report.user
-    //Associtions is not automatically fetched when we fatch a report.
+    // Creating a many to one relationship
+    // once you add this it will cause a change in the database.
+    // User who created this report will be accessed with report.user
+    // Associtions is not automatically fetched when we fatch a report.
     @ManyToOne(() => User, (user) => user.reports)
     user: User
 }
